@@ -93,9 +93,13 @@ Settingss:addButton("Rejoin Server", function()
     game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId)
 end)
 
-mainsec:addToggle("Disable Purchase Prompts", nil, function(value)
+mainsec:addToggle("Enable Purchase Prompts", nil, function(value)
     _G.Value = value
-    game:GetService("CoreGui").PurchasePromptApp.Enabled = _G.Value
+    if _G.Value then 
+    game:GetService("CoreGui").PurchasePromptApp.Enabled = false
+    else     _G.Value = value
+     game:GetService("CoreGui").PurchasePromptApp.Enabled = true
+    end
 end)
 
 autofarm:addToggle("Enabled", nil, function(value)
