@@ -27,8 +27,10 @@ local function LagServer()
 	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workout.CFrame
 	fireproximityprompt(workout.ProximityPrompt)
 	for i = 1, 400 do
-		game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer(9e9)
-	end
+		pcall(function()
+		game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer(2^1024)
+	      end)
+       end
 end
 
 
