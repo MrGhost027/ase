@@ -136,11 +136,12 @@ Settingss:addButton("Rejoin Server", function()
 	game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 local oldpos = HumanoidRootPart.CFrame
-HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
+HumanoidRootPart.CFrame = CFrame.new(-79.9094696, 19.8263607, 8124.82129, 1, 0, 0, 0, 1, 0, 0, 0, 1)
 wait(0.25)
 HumanoidRootPart.CFrame = oldpos
 for _, v in pairs(area.DraggableItems:GetDescendants()) do
 	if v:IsA("StringValue") and v.Name == "Title" and v.Value == "PYRAMID" then
+		local part = v.Parent.InteractionPoint
 		_G.Prox = v.Parent.InteractionPoint.ProximityPrompt
 	end
 end
@@ -157,13 +158,13 @@ end)
 
 autofarm:addToggle("Enabled", nil, function(value)
 	_G.On = value
-	HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
+	HumanoidRootPart.CFrame = CFrame.new(-79.9094696, 19.8263607, 8124.82129, 1, 0, 0, 0, 1, 0, 0, 0, 1)
 	wait(0.1)
 	task.defer(function()
 	    game.RunService.RenderStepped:connect(function()
 	    task.wait(0.1)
 	    if _G.On then
-	        HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
+	        HumanoidRootPart.CFrame = CFrame.new(-79.9094696, 19.8263607, 8124.82129, 1, 0, 0, 0, 1, 0, 0, 0, 1)
 			fireproximityprompt(_G.Prox, 0)
 	        end
 	    end)
