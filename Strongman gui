@@ -1,4 +1,3 @@
-
 repeat
 	wait()
 until game:IsLoaded()
@@ -35,7 +34,7 @@ local function autoworkout()
 	wait(0.1)
 	for i, v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
 		if v:IsA("ProximityPrompt") then
-		HumanoidRootPart.CFrame = v.Parent
+			HumanoidRootPart.CFrame = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment.WorkoutStation.Collider.CFrame
 			repeat
 				wait()
 				fireproximityprompt(v)
@@ -43,19 +42,19 @@ local function autoworkout()
 		end
 	end
 	while _G.auto do
-	   task.wait()
-	   if not _G.multipier or _G.multipier == 0 then
-	   game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer()
-	   else
-	   game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer(_G.multipier)
-	   end
-end
+		task.wait()
+		if not _G.multipier or _G.multipier == 0 then
+			game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer()
+		else
+			game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer(_G.multipier)
+		end
+	end
 end
 local function LagServer()
 	wait(0.1)
 	for i, v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
 		if v:IsA("ProximityPrompt") then
-		HumanoidRootPart.CFrame = v.Parent
+			HumanoidRootPart.CFrame = v.Parent
 			repeat
 				wait()
 				fireproximityprompt(v)
@@ -159,26 +158,26 @@ autofarm:addToggle("Enabled", nil, function(value)
 	HumanoidRootPart.CFrame = CFrame.new(-79.9094696, 19.8263607, 8124.82129, 1, 0, 0, 0, 1, 0, 0, 0, 1)
 	wait(0.1)
 	task.defer(function()
-	    game.RunService.RenderStepped:connect(function()
-	    task.wait(0.1)
-	    if _G.On then
-	        HumanoidRootPart.CFrame = CFrame.new(-79.9094696, 19.8263607, 8124.82129, 1, 0, 0, 0, 1, 0, 0, 0, 1)
-			fireproximityprompt(_G.Prox, 0)
-	        end
-	    end)
+		game.RunService.RenderStepped:connect(function()
+			task.wait(0.1)
+			if _G.On then
+				HumanoidRootPart.CFrame = CFrame.new(-79.9094696, 19.8263607, 8124.82129, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+				fireproximityprompt(_G.Prox, 0)
+			end
+		end)
 	end)
 end)
 autostrength:addToggle("Enabled", nil, function(value)
-    _G.auto = value
-    if _G.auto then
-        game:GetService("CoreGui").PurchasePromptApp.Enabled = false
-        task.defer(autoworkout)
-    else
-    game:GetService("CoreGui").PurchasePromptApp.Enabled = true
-    end
+	_G.auto = value
+	if _G.auto then
+		game:GetService("CoreGui").PurchasePromptApp.Enabled = false
+		task.defer(autoworkout)
+	else
+		game:GetService("CoreGui").PurchasePromptApp.Enabled = true
+	end
 end)
 autostrength:addSlider("Muliplier", 0, 0, 500, function(value)
-_G.multipier = value
+	_G.multipier = value
 end)
 char:addSlider("WalkSpeed", 0, 0, 1000, function(value)
 	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
