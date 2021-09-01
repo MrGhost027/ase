@@ -32,11 +32,10 @@ local function GetBadges()
 	end
 end
 local function autoworkout()
-	local workout = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetChildren()[4]:GetChildren()[5]
-	HumanoidRootPart.CFrame = workout.CFrame
 	wait(0.1)
 	for i, v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
 		if v:IsA("ProximityPrompt") then
+		HumanoidRootPart.CFrame = v.Parent
 			repeat
 				wait()
 				fireproximityprompt(v)
