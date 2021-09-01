@@ -34,7 +34,7 @@ end
 local function autoworkout()
 	local workout = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetChildren()[4]:GetChildren()[5]
 	HumanoidRootPart.CFrame = workout.CFrame
-	wait(0.1)
+	wait(0.25)
 	for i, v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
 		if v:IsA("ProximityPrompt") then
 			repeat
