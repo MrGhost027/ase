@@ -34,7 +34,7 @@ end
 local function autoworkout()
 	local workout = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetChildren()[4]:GetChildren()[5]
 	HumanoidRootPart.CFrame = workout.CFrame
-	wait(0.25)
+	wait(0.1)
 	for i, v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
 		if v:IsA("ProximityPrompt") then
 			repeat
@@ -137,7 +137,7 @@ Settingss:addButton("Rejoin Server", function()
 end)
 local oldpos = HumanoidRootPart.CFrame
 HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
-wait(0.1)
+wait(0.25)
 HumanoidRootPart.CFrame = oldpos
 for _, v in pairs(area.DraggableItems:GetDescendants()) do
 	if v:IsA("StringValue") and v.Name == "Title" and v.Value == "PYRAMID" then
