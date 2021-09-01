@@ -154,7 +154,6 @@ mainsec:addToggle("Disable Purchase Prompts", nil, function(value)
 		game:GetService("CoreGui").PurchasePromptApp.Enabled = true
 	end
 end)
-wait(1)
 
 autofarm:addToggle("Enabled", nil, function(value)
 	_G.On = value
