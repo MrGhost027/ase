@@ -20,6 +20,9 @@ local function GetBadges()
 end
 
 local function LagServer()
+	local workout = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetChildren()[4]:GetChildren()[5]
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workout.CFrame
+	fireproximityprompt(workout.ProximityPrompt)
 	for i = 1, 400 do
 		game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer(9e9)
 	end
