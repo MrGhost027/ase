@@ -25,18 +25,21 @@ end
 local function LagServer()
 	local workout = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetChildren()[4]:GetChildren()[5]
 	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workout.CFrame
-	for i,v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
-        if v:IsA("ProximityPrompt") then
-         fireproximityprompt(v)
-         end
-      end
+	wait(0.1)
+	for i, v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
+		if v:IsA("ProximityPrompt") then
+			repeat
+				wait()
+				fireproximityprompt(v)
+			until HumanoidRootPart.Anchored == true
+		end
+	end
 	for i = 1, 400 do
 		pcall(function()
-		game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer(2^1024)
-	      end)
-       end
+			game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer(2 ^ 1024)
+		end)
+	end
 end
-
 
 local function BreakExits()
     for _,v in pairs(game:GetService("Workspace").Areas:GetDescendants()) do
