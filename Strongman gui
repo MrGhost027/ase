@@ -1,30 +1,38 @@
-repeat wait() until game:IsLoaded()
-repeat wait() until game.Players.LocalPlayer.Character
+repeat
+	wait()
+until game:IsLoaded()
+repeat
+	wait()
+until game.Players.LocalPlayer.Character
 wait()
 _G.On = false
 local Codes = {
-    "strongman",
-    "100m",
-    "Chad",
-    "10m",
-    "25k",
-    "1500likes",
-    "5000likes",
-    "10000",
-    "500likes"
+	"strongman",
+	"100m",
+	"Chad",
+	"10m",
+	"25k",
+	"1500likes",
+	"5000likes",
+	"10000",
+	"500likes"
 }
 local HumanoidRootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+local pairs = pairs
 local rs = game:GetService("RunService")
+local area = game:GetService("Workspace").Areas["Area14_Retro"]
+local fireproximityprompt = fireproximityprompt
+local prox
 local function GetBadges()
-    for _, v in pairs(game:GetService("Workspace").BadgeColliders:GetChildren()) do
-        firetouchinterest(HumanoidRootPart, v, 0)
-        firetouchinterest(HumanoidRootPart, v, 1)
-    end
+	for _, v in pairs(game:GetService("Workspace").BadgeColliders:GetChildren()) do
+		firetouchinterest(HumanoidRootPart, v, 0)
+		firetouchinterest(HumanoidRootPart, v, 1)
+	end
 end
 
 local function LagServer()
 	local workout = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetChildren()[4]:GetChildren()[5]
-	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workout.CFrame
+	HumanoidRootPart.CFrame = workout.CFrame
 	wait(0.1)
 	for i, v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
 		if v:IsA("ProximityPrompt") then
@@ -42,33 +50,36 @@ local function LagServer()
 end
 
 local function BreakExits()
-    for _,v in pairs(game:GetService("Workspace").Areas:GetDescendants()) do
-        if v.Name:lower():find("exit") or v.Name:lower():find("copy") then
-            v:Destroy()
-        end
-    end
+	for _, v in pairs(game:GetService("Workspace").Areas:GetDescendants()) do
+		if v.Name:lower():find("exit") or v.Name:lower():find("copy") then
+			v:Destroy()
+		end
+	end
 end
 game:GetService("Workspace").Avoid:ClearAllChildren()
 game:GetService("Workspace").Avoid.ChildAdded:Connect(function(add)
-    rs.RenderStepped:Wait()
-    add:Destroy()
+	rs.RenderStepped:Wait()
+	add:Destroy()
 end)
 
 local rs = game:GetService("RunService")
 game:GetService("Workspace").PlayerDraggables[game.Players.LocalPlayer.UserId].DescendantAdded:Connect(function(added)
-    if added.Name == "ExtraWeight" and _G.noweight then
-        added:Destroy()
-    end
+	if added.Name == "ExtraWeight" and _G.noweight then
+		added:Destroy()
+	end
 end)
 game:GetService("Workspace").PlayerDraggables[game.Players.LocalPlayer.UserId].DescendantAdded:Connect(function(added)
-    rs.RenderStepped:Wait()
-    if  added:IsA("Part") and added:FindFirstChild("Coins") ~= nil then
-        if not _G.On then return end
-        repeat wait(0.1)
-        firetouchinterest(added,game:GetService("Workspace").Areas["Area14_Retro"].Goal,0)
-        firetouchinterest(added,game:GetService("Workspace").Areas["Area14_Retro"].Goal,1)
-        until added == nil
-    end
+	rs.RenderStepped:Wait()
+	if  added:IsA("Part") and added:FindFirstChild("Coins") ~= nil then
+		if not _G.On then
+			return
+		end
+		repeat
+			wait(0.1)
+			firetouchinterest(added, game:GetService("Workspace").Areas["Area14_Retro"].Goal, 0)
+			firetouchinterest(added, game:GetService("Workspace").Areas["Area14_Retro"].Goal, 1)
+		until added == nil
+	end
 end)
 
 
@@ -87,46 +98,52 @@ local mainsec = main:addSection("Main")
 local Settingss = settings:addSection("Settings")
 
 mainsec:addButton("Get all badges", function()
-    GetBadges()
+	GetBadges()
 end)
 
 mainsec:addButton("Break Exits", function()
-    BreakExits()
+	BreakExits()
 end)
 
 mainsec:addButton("Lag Server", function()
-    LagServer()
+	LagServer()
 end)
 
 Settingss:addButton("Rejoin Server", function()
-    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId)
+	game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
+local oldpos = HumanoidRootPart.CFrame
+HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
+wait(0.1)
+HumanoidRootPart.CFrame = oldpos
+for _, v in pairs(area.DraggableItems:GetDescendants()) do
+	if v:IsA("StringValue") and v.Name == "Title" and v.Value == "PYRAMID" then
+		_G.Prox = v.Parent.InteractionPoint.ProximityPrompt
+	end
+end
 
 mainsec:addToggle("Disable Purchase Prompts", nil, function(value)
-    _G.Value = value
-    if _G.Value then 
-    game:GetService("CoreGui").PurchasePromptApp.Enabled = false
-    else     _G.Value = value
-     game:GetService("CoreGui").PurchasePromptApp.Enabled = true
-    end
+	_G.Value = value
+	if _G.Value then
+		game:GetService("CoreGui").PurchasePromptApp.Enabled = false
+	else
+		_G.Value = value
+		game:GetService("CoreGui").PurchasePromptApp.Enabled = true
+	end
 end)
+wait(1)
 
 autofarm:addToggle("Enabled", nil, function(value)
-    _G.On = value
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
-    wait(0.2)
-    spawn(function()
-    if _G.On == false then while wait() do break end end
-    while _G.On and rs.RenderStepped:wait() do
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
-        for _,v in pairs(game:GetService("Workspace").Areas["Area14_Retro"].DraggableItems:GetDescendants()) do
-            if v:IsA("StringValue") and v.Name == "Title" and v.Value == "PYRAMID" then
-            fireproximityprompt(v.Parent.InteractionPoint.ProximityPrompt,0)
-            end
-        end
-     end
-    end)
-    end)
+	_G.On = value
+	HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
+	wait(0.1)
+	spawn(function()
+		while _G.On and wait(0.1) do
+			HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
+			fireproximityprompt(_G.Prox, 0)
+		end
+	end)
+end)
 char:addSlider("WalkSpeed", 0, 0, 1000, function(value)
-    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
 end)
