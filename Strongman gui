@@ -54,7 +54,7 @@ local function LagServer()
 	wait(0.1)
 	for i, v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
 		if v:IsA("ProximityPrompt") then
-			HumanoidRootPart.CFrame = v.Parent
+			HumanoidRootPart.CFrame = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment.WorkoutStation.Collider.CFrame
 			repeat
 				wait()
 				fireproximityprompt(v)
