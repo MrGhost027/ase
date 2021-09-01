@@ -10,6 +10,7 @@ local Codes = {
 	"10000",
 	"500likes"
 }
+local rs = game:GetService("RunService")
 
 local function GetBadges()
 	for _, v in pairs(game:GetService("Workspace").BadgeColliders:GetChildren()) do
@@ -19,7 +20,7 @@ local function GetBadges()
 end
 
 local function LagServer()
-	for i = 1, 99 do
+	for i = 1, 400 do
 		game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer(9e9)
 	end
 end
@@ -38,7 +39,6 @@ game:GetService("Workspace").Avoid.ChildAdded:Connect(function(add)
 	add:Destroy()
 end)
 
-local rs = game:GetService("RunService")
 game:GetService("Workspace").PlayerDraggables[game.Players.LocalPlayer.UserId].DescendantAdded:Connect(function(added)
 	if added.Name == "ExtraWeight" and _G.noweight then
 		added:Destroy()
