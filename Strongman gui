@@ -1,3 +1,4 @@
+
 repeat
 	wait()
 until game:IsLoaded()
@@ -6,6 +7,7 @@ repeat
 until game.Players.LocalPlayer.Character
 wait()
 _G.On = false
+_G.auto = false
 local Codes = {
 	"strongman",
 	"100m",
@@ -29,7 +31,27 @@ local function GetBadges()
 		firetouchinterest(HumanoidRootPart, v, 1)
 	end
 end
-
+local function autoworkout()
+	local workout = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetChildren()[4]:GetChildren()[5]
+	HumanoidRootPart.CFrame = workout.CFrame
+	wait(0.1)
+	for i, v in pairs(game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetDescendants()) do
+		if v:IsA("ProximityPrompt") then
+			repeat
+				wait()
+				fireproximityprompt(v)
+			until HumanoidRootPart.Anchored == true
+		end
+	end
+	while _G.auto do
+	   task.wait()
+	   if not _G.multipier or _G.multipier == 0 then
+	   game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer()
+	   else
+	   game:GetService("ReplicatedStorage").StrongMan_UpgradeStrength:InvokeServer(_G.multipier)
+	   end
+end
+end
 local function LagServer()
 	local workout = game:GetService("Workspace").Areas.Area1.Gym.TrainingEquipment:GetChildren()[4]:GetChildren()[5]
 	HumanoidRootPart.CFrame = workout.CFrame
@@ -93,6 +115,7 @@ local farm = venyx:addPage("Farming", 5012544693)
 local page = venyx:addPage("Character", 5012544693)
 local settings = venyx:addPage("Settings", 5012544693)
 local autofarm = farm:addSection("Auto Farm")
+local autostrength = farm:addSection("Auto Strength")
 local char = page:addSection("Character")
 local mainsec = main:addSection("Main")
 local Settingss = settings:addSection("Settings")
@@ -137,13 +160,31 @@ autofarm:addToggle("Enabled", nil, function(value)
 	_G.On = value
 	HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
 	wait(0.1)
-	spawn(function()
-		while _G.On and wait(0.1) do
-			HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
+	task.defer(function()
+	    game.RunService.RenderStepped:connect(function()
+	    task.wait(0.1)
+	    if _G.On then
+	        HumanoidRootPart.CFrame = CFrame.new(-80, 53, 8117)
 			fireproximityprompt(_G.Prox, 0)
-		end
+	        end
+	    end)
 	end)
+end)
+autostrength:addToggle("Enabled", nil, function(value)
+    _G.auto = value
+    if _G.auto then
+        game:GetService("CoreGui").PurchasePromptApp.Enabled = false
+        task.defer(autoworkout)
+    else
+    game:GetService("CoreGui").PurchasePromptApp.Enabled = true
+    end
+end)
+autostrength:addSlider("Muliplier", 0, 0, 500, function(value)
+_G.multipier = value
 end)
 char:addSlider("WalkSpeed", 0, 0, 1000, function(value)
 	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+end)
+char:addSlider("JumpPower", 0, 0, 1000, function(value)
+	game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
 end)
