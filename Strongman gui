@@ -1,11 +1,9 @@
-repeat
-	wait()
-until game:IsLoaded()
-repeat
-	wait()
-until game.Players.LocalPlayer.Character
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
 wait()
 _G.On = false
+_G.On2 = false
 _G.auto = false
 local Codes = {
 	"strongman",
@@ -18,7 +16,14 @@ local Codes = {
 	"10000",
 	"500likes"
 }
+function testinterest(part, totouch, staticnum)
+    local test = part.CFrame
+    part.CFrame = totouch.CFrame
+    wait(0.2)
+    part.CFrame = test
+end
 local HumanoidRootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+local task_defer = task.defer
 local pairs = pairs
 local rs = game:GetService("RunService")
 local area = game:GetService("Workspace").Areas["Area14_Retro"]
@@ -75,12 +80,15 @@ local function BreakExits()
 		end
 	end
 end
-game:GetService("Workspace").Avoid:ClearAllChildren()
-game:GetService("Workspace").Avoid.ChildAdded:Connect(function(add)
-	rs.RenderStepped:Wait()
-	add:Destroy()
-end)
-
+for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
+	if v:IsA("BoolValue") and v.Name == "IgnoreInStudio" and v.Parent:IsA("Script") then
+        v.Parent.Parent.ChildAdded:Connect(function(add)
+	     rs.RenderStepped:Wait()
+	     add:Destroy()
+    end)
+        v.Parent.Parent:FindFirstChildWhichIsA("Part"):Destroy()
+    end
+end
 local rs = game:GetService("RunService")
 game:GetService("Workspace").PlayerDraggables[game.Players.LocalPlayer.UserId].DescendantAdded:Connect(function(added)
 	if added.Name == "ExtraWeight" and _G.noweight then
@@ -89,7 +97,7 @@ game:GetService("Workspace").PlayerDraggables[game.Players.LocalPlayer.UserId].D
 end)
 game:GetService("Workspace").PlayerDraggables[game.Players.LocalPlayer.UserId].DescendantAdded:Connect(function(added)
 	rs.RenderStepped:Wait()
-	if  added:IsA("Part") and added:FindFirstChild("Coins") ~= nil then
+	if added:IsA("Part") and added:FindFirstChild("Coins") ~= nil then
 		if not _G.On then
 			return
 		end
@@ -101,6 +109,20 @@ game:GetService("Workspace").PlayerDraggables[game.Players.LocalPlayer.UserId].D
 	end
 end)
 
+task_defer(function()
+    game:GetService("Workspace").PlayerDraggables[game.Players.LocalPlayer.UserId].DescendantAdded:Connect(function(added)
+	rs.RenderStepped:Wait()
+	if added:IsA("Part") and added:FindFirstChild("Coins") ~= nil then
+		if not _G.On2 then
+			return
+		end
+		repeat
+			task.wait(0.1)
+			testinterest(added, game:GetService("Workspace").Areas["Area14_Retro"].Goal, "static")
+		until added == nil
+	end
+end)
+end)
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()
 local venyx = library.new("Strongman Simulator", 5013109572)
@@ -112,6 +134,7 @@ local farm = venyx:addPage("Farming", 5012544693)
 local page = venyx:addPage("Character", 5012544693)
 local settings = venyx:addPage("Settings", 5012544693)
 local autofarm = farm:addSection("Auto Farm")
+local autofarm2 = farm:addSection("Auto Farm 2 (slower, but will not slow down like V1)")
 local autostrength = farm:addSection("Auto Strength")
 local char = page:addSection("Character")
 local mainsec = main:addSection("Main")
@@ -157,7 +180,7 @@ autofarm:addToggle("Enabled", nil, function(value)
 	_G.On = value
 	HumanoidRootPart.CFrame = CFrame.new(-79.9094696, 19.8263607, 8124.82129, 1, 0, 0, 0, 1, 0, 0, 0, 1)
 	wait(0.1)
-	task.defer(function()
+	task_defer(function()
 		game.RunService.RenderStepped:connect(function()
 			task.wait(0.1)
 			if _G.On then
@@ -167,13 +190,30 @@ autofarm:addToggle("Enabled", nil, function(value)
 		end)
 	end)
 end)
+autofarm2:addToggle("Enabled", nil, function(value)
+	_G.On2 = value
+	HumanoidRootPart.CFrame = CFrame.new(-79.9094696, 19.8263607, 8124.82129, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+	HumanoidRootPart.Anchored = false
+	wait(0.1)
+	task_defer(function()
+		game.RunService.RenderStepped:connect(function()
+			if _G.On2 then
+			    workspace.Gravity = math.huge
+			    HumanoidRootPart.CFrame = CFrame.new(-79.9094696, 19.8263607, 8124.82129, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+			    fireproximityprompt(_G.Prox, 0)
+			else
+			    workspace.Gravity = 196.2 
+		    end
+		end)
+	end)
+end)
 autostrength:addToggle("Enabled", nil, function(value)
 	_G.auto = value
 	if _G.auto then
-		game:GetService("CoreGui").PurchasePromptApp.Enabled = false
-		task.defer(autoworkout)
+		pcall(function() game:GetService("CoreGui").PurchasePromptApp.Enabled = false end)
+		task_defer(autoworkout)
 	else
-		game:GetService("CoreGui").PurchasePromptApp.Enabled = true
+			pcall(function() game:GetService("CoreGui").PurchasePromptApp.Enabled = true end)
 	end
 end)
 autostrength:addSlider("Muliplier", 0, 0, 500, function(value)
