@@ -5,6 +5,7 @@ wait()
 _G.On = false
 _G.On2 = false
 _G.auto = false
+_G.multipier = 0
 local Codes = {
 	"strongman",
 	"100m",
